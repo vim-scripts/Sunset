@@ -1,0 +1,209 @@
+*sunset.txt*        Automatically set background on local sunrise/sunset time.
+
+FRONT MATTER                                           *sunset-front-matter*
+
+         Author: Alastair Touw <alastair@touw.me.uk>
+        License: Distributed under the same terms as Vim. See |license|.
+        Version: 1.0.3
+    Last Change: 2012 Oct 20
+
+INTRODUCTION AND USAGE                    *sunset* *sunset-introduction-usage*
+
+Sunset automatically sets |'background'| when the sun rises and sets, and also
+when you start Vim. When the sun is up, or rises, it'll
+'set background=light'. When the sun is down, or sets,
+it'll 'set background=dark'.
+
+So as not to interrupt you, Sunset waits for four seconds (on the
+|CursorHold| event) after you've pressed a key or left insert mode before
+changing the background. If you change your background during the day or
+night, it'll respect that.
+
+You must set some options in your `.vimrc` for Sunset to work, so
+please read on to |sunset-configuration| for details.
+
+CONTRIBUTIONS                                         *sunset-contributions*
+
+If you feel that Sunset can be improved, pull requests and issues are
+appreciated and humbly requested, on Github at: http://github.com/amdt/sunset
+
+CONTENTS                                                   *sunset-contents*
+
+      i. Front Matter . . . . . . . . . . . . . . . . .|sunset-front-matter|
+     ii. Introduction & Usage . . . . . . . . .  |sunset-introduction-usage|
+    iii. Contributions  . . . . . . . . . . . . . . . |sunset-contributions|
+     iv. Contents . . . . . . . . . . . . . . . . . . . .  |sunset-contents|
+      1. Installation . . . . . . . . . . . . . . . .  |sunset-installation|
+          a) With a Plugin Manager  . . |sunset-installation-plugin-manager|
+          b) Using Vimball  . . . . . . . . .  |sunset-installation-vimball|
+          c) Manually . . . . . . . . . . . . . |sunset-installation-manual|
+      2. Requirements . . . . . . . . . . . . . . . .  |sunset-requirements|
+      3. Configuration  . . . . . . . . . . . . . . . |sunset-configuration|
+          a) 'g:loaded_sunset'  . . . . . . . . . . . . .  |'loaded_sunset'|
+          b) 'g:sunset_latitude' &  . . . . . . . . . .  |'sunset_latitude'|
+             'g:sunset_longitude' . . . . . . . . . . . |'sunset_longitude'|
+          c) 'g:sunset_utc_offset'. . . . . . . . . .  |'sunset_utc_offset'|
+      4. A Reminder on Privacy  . . . . . . . . . . . . . . |sunset-privacy|
+      5. Version History  . . . . . . . . . . . . . |sunset-version-history|
+      6. Known Issues . . . . . . . . . . . . . . . .  |sunset-known-issues|
+      7. License  . . . . . . . . . . . . . . . . . . . . . |sunset-license|
+      8. Credits  . . . . . . . . . . . . . . . . . . . . . |sunset-credits|
+
+INSTALLATION                                           *sunset-installation*
+
+With a Plugin Manager:                  *sunset-installation-plugin-manager*
+
+Vundle: ~
+
+If you don't already have a preferred manager, I recommend installing Vundle
+(http://github.com/gmarik/vundle). Once done, add the declaration for Sunset
+to your `.vimrc`:
+
+    Bundle 'amdt/sunset'
+
+And install:
+
+    :BundleInstall
+
+Pathogen: ~
+
+If you're using Pathogen, simply extract the archive to `$HOME/.vim/bundle` or
+better yet, clone the Git repository. In a UNIX shell, for example:
+
+    cd ~/.vim/bundle
+    git clone git://github.com/amdt/sunset.git
+
+Using Vimball:                                 *sunset-installation-vimball*
+
+Open the Vimball with Vim. For example, from a UNIX shell you might run:
+
+    vim sunset.vba
+
+Once loaded in Vim, run the following two commands:
+
+    |:so| %
+    |:q|
+
+Manually:                                       *sunset-installation-manual*
+
+Copy the files in the included zip archive into your |'runtimepath'|. The
+directory tree for Sunset is as follows:
+
+    /doc
+        sunset.txt
+    /plugin
+        sunset.vim
+    README.markdown
+
+Place `sunset.txt` under `$HOME/.vim/doc` and `sunset.vim` under
+`$HOME/.vim/plugin` where `$HOME` is the location of your `.vim` directory.
+
+You can find this by typing '|:echo| |$HOME|'.
+
+You can safely discard of `README.markdown`.
+
+REQUIREMENTS                                           *sunset-requirements*
+
+    * Sunset requires Vim 7.3.
+    * Vim compiled with |+float| support. Use |:version| to check if this
+      feature is available in your build.
+    * Requires a system with |strftime()|, with the following format options:
+        - %j returns the current day of the year.
+        - %H returns the current hour of the day in 24-hour time.
+        - %M returns the current minute of the hour.
+    * A |colorscheme| with both light and dark variants, such as Solarized
+      (http://github.com/altercation/vim-colors-solarized) or Hemisu
+      (http://github.com/noahfrederick/Hemisu)
+
+CONFIGURATION                                         *sunset-configuration*
+
+'g:loaded_sunset'                                          *'loaded_sunset'*
+
+Set to a non-0 value to disable Sunset, for example:
+
+    let g:loaded_sunset = 1
+
+'g:sunset_latitude' & 'g:sunset_longitude'               *'sunset_latitude'*
+                                                        *'sunset_longitude'*
+
+Note: If you push your dotfiles to Github, please see |sunset-privacy|.
+
+The latitude and longitude of your location in decimal. Values North and East
+must be positive values, those South and West must be negative.
+
+London, for example, lies at 51 degrees, 30 minutes North; and 7 minutes West.
+
+In decimal, this is 51.5 degrees North, 0.1167 degrees West.
+
+If you lived in London, you might set these options as follows:
+
+    let g:sunset_latitude = 51.5
+    let g:sunset_longitude = -0.1167
+
+If you lived in Tokyo (35 degrees, 40 minutes and 12 seconds North; 139
+degrees, 46 minutes and 12 seconds East), you might set these options
+as follows:
+
+    let g:sunset_latitude = 35.67
+    let g:sunset_longitude = 139.8
+
+Note: Don't forget, negative values South and West.
+
+'g:sunset_utc_offset'                                  *'sunset_utc_offset'*
+
+The difference in hours between your timezone and Coordinated Universal Time.
+
+For example:
+
+    let g:sunset_utc_offset = 0 " London
+    let g:sunset_utc_offset = 1 " London (British Summer Time)
+    let g:sunset_utc_offset = 9 " Tokyo
+
+Note: Sunset does not handle any daylight savings civil times.
+
+A REMINDER ON PRIVACY                                       *sunset-privacy*
+
+For those of us who publish our dotfiles on Github etc., please take this
+as a gentle reminder that out of habit you might be about to publish your
+whereabouts to the greater public. If this concerns you, using the location of
+your nearest large city might suffice; Sunset will be plenty accurate enough.
+
+VERSION HISTORY                                     *sunset-version-history*
+
+1.0.3 (Sat Oct 20, 2012) ~
+    - Improve requirements checking.
+    - Rewrite documentation.
+
+1.0.1 & 1.0.2 (Thu Oct 18, 2012) ~
+    - Correct typos in documentation.
+
+1.0.0 (Thu Oct 18, 2012) ~
+    - Initial release.
+
+KNOWN ISSUES                                           *sunset-known-issues*
+
+For known issues (and to report your own), please see the issue tracker on
+Github: http://github.com/amdt/sunset/issues
+
+LICENSE                                                     *sunset-license*
+
+Sunset is distributed under the same terms as Vim itself. See |license|
+for details.
+
+CREDITS                                                     *sunset-credits*
+
+Sunset uses an algorithm for finding the local sunrise and sunset times
+published in the Almanac for Computers, 1990, by the Nautical Almanac Office
+of the United States Naval Observatory, as
+detailed here: http://williams.best.vwh.net/sunrise_sunset_algorithm.htm
+
+Special thanks: ~
+
+    * Gueorgui Tcherednitchenko --- Whose tweet
+      (http://twitter.com/gueorgui/statuses/250765514975113216)
+      inspired the development of this plugin.
+    * Nick Rogers --- Whose testing helped define Sunset's requirements.
+
+                                    * * *
+
+vim:tw=78:ft=help

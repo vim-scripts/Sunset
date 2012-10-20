@@ -1,0 +1,22 @@
+This is a mirror of http://www.vim.org/scripts/script.php?script_id=4277
+
+INTRODUCTION:
+
+Sunset automatically sets 'background' when the sun rises and sets, and also when you start Vim. When the sun is up, or rises, it'll 'set background=light'. When the sun is down, or sets, it'll 'set background=dark'.
+
+So as not to interrupt you, Sunset waits for four seconds (on the CursorHold event) after you've pressed a key or left insert mode before changing the background. If you change your background during the day or night, it'll respect that.
+
+CONTRIBUTIONS:
+
+If you feel that Sunset can be improved, pull requests and issues are appreciated and humbly requested, on Github at: http://github.com/amdt/sunset
+
+REQUIREMENTS:
+
+Vim compiled with +float support. Use ':version' to check if this feature is available in your build.
+
+Requires a system with 'strftime()', with the following format options:
+- %j returns the current day of the year.
+- %H returns the current hour of the day in 24-hour time.
+- %M returns the current minute of the hour.
+
+A colorscheme with both light and dark variants, such as Solarized (http://github.com/altercation/vim-colors-solarized) or Hemisu (http://github.com/noahfrederick/Hemisu).
