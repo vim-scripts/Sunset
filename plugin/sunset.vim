@@ -4,8 +4,8 @@
 "  Maintainer: Alastair Touw <alastair@touw.me.uk>
 "     Website: http://github.com/amdt/sunset
 "     License: Distributed under the same terms as Vim. See ':help license'.
-"     Version: 1.0.3
-" Last Change: 2012 Oct 20
+"     Version: 1.1.0
+" Last Change: 2012 Oct 28
 "       Usage: See 'doc/sunset.txt' or ':help sunset' if installed.
 
 if exists("g:loaded_sunset")
@@ -194,6 +194,9 @@ function s:sunset()
 			let s:NIGHTTIME_CHECKED = 1
 			let s:DAYTIME_CHECKED = 0
 		endif
+	endif
+	if exists('*g:sunset_callback')
+		call g:sunset_callback()
 	endif
 endfunction
 

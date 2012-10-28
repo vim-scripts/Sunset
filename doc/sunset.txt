@@ -2,14 +2,14 @@
 
 FRONT MATTER                                           *sunset-front-matter*
 
-         Author: Alastair Touw <alastair@touw.me.uk>
+     Maintainer: Alastair Touw <alastair@touw.me.uk>
         License: Distributed under the same terms as Vim. See |license|.
-        Version: 1.0.3
-    Last Change: 2012 Oct 20
+        Version: 1.1.0
+    Last Change: 2012 Oct 28
 
 INTRODUCTION AND USAGE                    *sunset* *sunset-introduction-usage*
 
-Sunset automatically sets |'background'| when the sun rises and sets, and also
+Sunset automatically sets 'background' when the sun rises and sets, and also
 when you start Vim. When the sun is up, or rises, it'll
 'set background=light'. When the sun is down, or sets,
 it'll 'set background=dark'.
@@ -42,7 +42,8 @@ CONTENTS                                                   *sunset-contents*
           a) 'g:loaded_sunset'  . . . . . . . . . . . . .  |'loaded_sunset'|
           b) 'g:sunset_latitude' &  . . . . . . . . . .  |'sunset_latitude'|
              'g:sunset_longitude' . . . . . . . . . . . |'sunset_longitude'|
-          c) 'g:sunset_utc_offset'. . . . . . . . . .  |'sunset_utc_offset'|
+          c) 'g:sunset_utc_offset'  . . . . . . . . .  |'sunset_utc_offset'|
+          d) 'g:sunset_callback()'  . . . . . . . . .  |'sunset_callback()'|
       4. A Reminder on Privacy  . . . . . . . . . . . . . . |sunset-privacy|
       5. Version History  . . . . . . . . . . . . . |sunset-version-history|
       6. Known Issues . . . . . . . . . . . . . . . .  |sunset-known-issues|
@@ -58,35 +59,35 @@ Vundle: ~
 If you don't already have a preferred manager, I recommend installing Vundle
 (http://github.com/gmarik/vundle). Once done, add the declaration for Sunset
 to your `.vimrc`:
-
+>
     Bundle 'amdt/sunset'
-
+<
 And install:
-
+>
     :BundleInstall
-
+<
 Pathogen: ~
 
 If you're using Pathogen, simply extract the archive to `$HOME/.vim/bundle` or
 better yet, clone the Git repository. In a UNIX shell, for example:
-
+>
     cd ~/.vim/bundle
     git clone git://github.com/amdt/sunset.git
-
+<
 Using Vimball:                                 *sunset-installation-vimball*
 
 Open the Vimball with Vim. For example, from a UNIX shell you might run:
-
+>
     vim sunset.vba
-
+<
 Once loaded in Vim, run the following two commands:
-
-    |:so| %
-    |:q|
-
+>
+    :so %
+    :q
+<
 Manually:                                       *sunset-installation-manual*
 
-Copy the files in the included zip archive into your |'runtimepath'|. The
+Copy the files in the included zip archive into your 'runtimepath'. The
 directory tree for Sunset is as follows:
 
     /doc
@@ -113,16 +114,16 @@ REQUIREMENTS                                           *sunset-requirements*
         - %M returns the current minute of the hour.
     * A |colorscheme| with both light and dark variants, such as Solarized
       (http://github.com/altercation/vim-colors-solarized) or Hemisu
-      (http://github.com/noahfrederick/Hemisu)
+      (http://github.com/noahfrederick/Hemisu).
 
 CONFIGURATION                                         *sunset-configuration*
 
 'g:loaded_sunset'                                          *'loaded_sunset'*
 
 Set to a non-0 value to disable Sunset, for example:
-
+>
     let g:loaded_sunset = 1
-
+<
 'g:sunset_latitude' & 'g:sunset_longitude'               *'sunset_latitude'*
                                                         *'sunset_longitude'*
 
@@ -136,17 +137,17 @@ London, for example, lies at 51 degrees, 30 minutes North; and 7 minutes West.
 In decimal, this is 51.5 degrees North, 0.1167 degrees West.
 
 If you lived in London, you might set these options as follows:
-
+>
     let g:sunset_latitude = 51.5
     let g:sunset_longitude = -0.1167
-
+<
 If you lived in Tokyo (35 degrees, 40 minutes and 12 seconds North; 139
 degrees, 46 minutes and 12 seconds East), you might set these options
 as follows:
-
+>
     let g:sunset_latitude = 35.67
     let g:sunset_longitude = 139.8
-
+<
 Note: Don't forget, negative values South and West.
 
 'g:sunset_utc_offset'                                  *'sunset_utc_offset'*
@@ -154,12 +155,33 @@ Note: Don't forget, negative values South and West.
 The difference in hours between your timezone and Coordinated Universal Time.
 
 For example:
-
+>
     let g:sunset_utc_offset = 0 " London
     let g:sunset_utc_offset = 1 " London (British Summer Time)
     let g:sunset_utc_offset = 9 " Tokyo
-
+<
 Note: Sunset does not handle any daylight savings civil times.
+
+'g:sunset_callback()'                                  *'sunset_callback()'*
+
+This function is called every time Sunset checks the time. You can use it to
+make Sunset do more than set 'background'. In the following example, the theme
+used by Powerline* is changed:
+>
+    let g:sunset_last_background = ''
+    function! g:sunset_callback()
+        if g:sunset_last_background != &bg &&
+                    \ exists(':PowerlineReloadColorscheme')
+            let g:sunset_last_background = &bg
+            let g:Powerline_colorscheme =
+                \ &background == 'light' ? 'solarizedLight' : 'solarizedDark'
+            PowerlineReloadColorscheme
+        endif
+    endfunction
+<
+
+* Powerline is 'the ultimate vim statusline utility'. It's very cool; you
+  should check it out: https://github.com/Lokaltog/vim-powerline
 
 A REMINDER ON PRIVACY                                       *sunset-privacy*
 
@@ -170,14 +192,23 @@ your nearest large city might suffice; Sunset will be plenty accurate enough.
 
 VERSION HISTORY                                     *sunset-version-history*
 
+1.1.0 (Sun Oct 28, 2012) ~
+
+    - Added |'sunset_callback()'|.
+        Courtesy of Github user 'delphinus35'
+        (http://github.com/amdt/sunset/pull/1)
+
 1.0.3 (Sat Oct 20, 2012) ~
-    - Improve requirements checking.
-    - Rewrite documentation.
+
+    - Improved requirements checking.
+    - Rewrote documentation.
 
 1.0.1 & 1.0.2 (Thu Oct 18, 2012) ~
-    - Correct typos in documentation.
+
+    - Corrected typos in documentation.
 
 1.0.0 (Thu Oct 18, 2012) ~
+
     - Initial release.
 
 KNOWN ISSUES                                           *sunset-known-issues*
@@ -206,4 +237,4 @@ Special thanks: ~
 
                                     * * *
 
-vim:tw=78:ft=help
+vim:tw=78:ft=help:norl:
