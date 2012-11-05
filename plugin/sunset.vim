@@ -4,44 +4,62 @@
 "  Maintainer: Alastair Touw <alastair@touw.me.uk>
 "     Website: http://github.com/amdt/sunset
 "     License: Distributed under the same terms as Vim. See ':help license'.
-"     Version: 1.1.0
-" Last Change: 2012 Oct 28
+"     Version: 1.2.0
+" Last Change: 2012 Nov 5
 "       Usage: See 'doc/sunset.txt' or ':help sunset' if installed.
+"
+" GetLatestVimScripts: 4277 18920 :AutoInstall: Sunset
 
 if exists("g:loaded_sunset")
 	finish
 endif
 let g:loaded_sunset = 1
 
+let s:errors = []
+let s:warnings = []
+
 if v:version < 703
-	echoerr "Requires Vim 7.3."
-	finish
+	call add(s:errors, "Requires Vim 7.3")
 endif
 
 if !has("float")
-	echoerr "Requires Vim be compiled with +float support."
-	finish
+	call add(s:errors, "Requires Vim be compiled with +float support.")
 endif
 
 if !exists("*strftime")
-	echoerr "Requires a system with strftime()"
-	finish
+	call add(s:errors, "Requires a system with strftime()")
 endif
 
-let s:sunset_required_options =
+if exists('*g:sunset_callback')
+	call add(s:warnings, "sunset_callback() has been deprecated and will be removed in the next release. Please see `:h 'sunset_daytime_callback()'` & `:h 'sunset_nighttime_callback()'`")
+endif
+
+let s:required_options =
 			\ ["g:sunset_latitude", "g:sunset_longitude", "g:sunset_utc_offset"]
 
-for option in s:sunset_required_options
+for option in s:required_options
 	if exists(option)
-		call filter(s:sunset_required_options, 'v:val != option')
+		call filter(s:required_options, 'v:val != option')
 	endif
 endfor
 
-if !empty(s:sunset_required_options)
-	for option in s:sunset_required_options
-		echoerr printf("%s missing! See ':help %s' for more details.", option, option)
+if !empty(s:required_options)
+	for option in s:required_options
+		call add(s:errors, printf("%s missing! See ':help %s' for more details.", option, option))
+	endfor
+endif
+
+if !empty(s:errors)
+	for error in s:errors
+		echoerr error
 	endfor
 	finish
+endif
+
+if !empty(s:warnings)
+	for warning in s:warnings
+		echoerr warning
+	endfor
 endif
 
 let s:save_cpo = &cpo
@@ -184,13 +202,21 @@ endfunction
 function s:sunset()
 	if s:daytimep(s:hours_and_minutes_to_minutes(strftime("%H"), strftime("%M")))
 		if s:DAYTIME_CHECKED != 1
-			set background=light
+			if exists('*g:sunset_daytime_callback')
+				call g:sunset_daytime_callback()
+			else
+				set background=light
+			endif
 			let s:DAYTIME_CHECKED = 1
 			let s:NIGHTTIME_CHECKED = 0
 		endif
 	else
 		if s:NIGHTTIME_CHECKED != 1
-			set background=dark
+			if exists('*g:sunset_nighttime_callback')
+				call g:sunset_nighttime_callback()
+			else
+				set background=dark
+			endif
 			let s:NIGHTTIME_CHECKED = 1
 			let s:DAYTIME_CHECKED = 0
 		endif

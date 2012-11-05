@@ -4,8 +4,8 @@ FRONT MATTER                                           *sunset-front-matter*
 
      Maintainer: Alastair Touw <alastair@touw.me.uk>
         License: Distributed under the same terms as Vim. See |license|.
-        Version: 1.1.0
-    Last Change: 2012 Oct 28
+        Version: 1.2.0
+    Last Change: 2012 Nov 5
 
 INTRODUCTION AND USAGE                    *sunset* *sunset-introduction-usage*
 
@@ -13,6 +13,10 @@ Sunset automatically sets 'background' when the sun rises and sets, and also
 when you start Vim. When the sun is up, or rises, it'll
 'set background=light'. When the sun is down, or sets,
 it'll 'set background=dark'.
+
+Sunset can also change your |colorscheme|, your Powerline theme, or anything
+else you can think of. See |'sunset_daytime_callback()'| and
+|'sunset_nighttime_callback()'| for details.
 
 So as not to interrupt you, Sunset waits for four seconds (on the
 |CursorHold| event) after you've pressed a key or left insert mode before
@@ -29,7 +33,7 @@ appreciated and humbly requested, on Github at: http://github.com/amdt/sunset
 
 CONTENTS                                                   *sunset-contents*
 
-      i. Front Matter . . . . . . . . . . . . . . . . .|sunset-front-matter|
+      i. Front Matter . . . . . . . . . . . . . . . .  |sunset-front-matter|
      ii. Introduction & Usage . . . . . . . . .  |sunset-introduction-usage|
     iii. Contributions  . . . . . . . . . . . . . . . |sunset-contributions|
      iv. Contents . . . . . . . . . . . . . . . . . . . .  |sunset-contents|
@@ -38,12 +42,14 @@ CONTENTS                                                   *sunset-contents*
           b) Using Vimball  . . . . . . . . .  |sunset-installation-vimball|
           c) Manually . . . . . . . . . . . . . |sunset-installation-manual|
       2. Requirements . . . . . . . . . . . . . . . .  |sunset-requirements|
-      3. Configuration  . . . . . . . . . . . . . . . |sunset-configuration|
-          a) 'g:loaded_sunset'  . . . . . . . . . . . . .  |'loaded_sunset'|
-          b) 'g:sunset_latitude' &  . . . . . . . . . .  |'sunset_latitude'|
+      3. Configuration (required) . . . . .  |sunset-configuration-required|
+          a) 'g:sunset_latitude' &  . . . . . . . . . .  |'sunset_latitude'|
              'g:sunset_longitude' . . . . . . . . . . . |'sunset_longitude'|
-          c) 'g:sunset_utc_offset'  . . . . . . . . .  |'sunset_utc_offset'|
-          d) 'g:sunset_callback()'  . . . . . . . . .  |'sunset_callback()'|
+          b) 'g:sunset_utc_offset'  . . . . . . . . .  |'sunset_utc_offset'|
+      4. Configuration (optional) . . . . .  |sunset-configuration-optional|
+          a) 'g:loaded_sunset'  . . . . . . . . . . . . .  |'loaded_sunset'|
+          b) 'g:sunset_daytime_callback()' &   |'sunset_daytime_callback()'|
+             'g:sunset_nighttime_callback()' |'sunset_nighttime_callback()'|
       4. A Reminder on Privacy  . . . . . . . . . . . . . . |sunset-privacy|
       5. Version History  . . . . . . . . . . . . . |sunset-version-history|
       6. Known Issues . . . . . . . . . . . . . . . .  |sunset-known-issues|
@@ -105,25 +111,22 @@ You can safely discard of `README.markdown`.
 
 REQUIREMENTS                                           *sunset-requirements*
 
-    * Sunset requires Vim 7.3.
+    * Vim 7.3.
     * Vim compiled with |+float| support. Use |:version| to check if this
       feature is available in your build.
-    * Requires a system with |strftime()|, with the following format options:
+    * A system with |strftime()|, with the following format options:
         - %j returns the current day of the year.
         - %H returns the current hour of the day in 24-hour time.
         - %M returns the current minute of the hour.
+
+Recommended: ~
+
     * A |colorscheme| with both light and dark variants, such as Solarized
       (http://github.com/altercation/vim-colors-solarized) or Hemisu
       (http://github.com/noahfrederick/Hemisu).
 
-CONFIGURATION                                         *sunset-configuration*
+CONFIGURATION (REQUIRED)                     *sunset-configuration-required*
 
-'g:loaded_sunset'                                          *'loaded_sunset'*
-
-Set to a non-0 value to disable Sunset, for example:
->
-    let g:loaded_sunset = 1
-<
 'g:sunset_latitude' & 'g:sunset_longitude'               *'sunset_latitude'*
                                                         *'sunset_longitude'*
 
@@ -162,23 +165,51 @@ For example:
 <
 Note: Sunset does not handle any daylight savings civil times.
 
-'g:sunset_callback()'                                  *'sunset_callback()'*
+CONFIGURATION (OPTIONAL)                     *sunset-configuration-optional*
 
-This function is called every time Sunset checks the time. You can use it to
-make Sunset do more than set 'background'. In the following example, the theme
-used by Powerline* is changed:
+'g:loaded_sunset'                                          *'loaded_sunset'*
+
+Set to a non-0 value to disable Sunset, for example:
 >
-    let g:sunset_last_background = ''
-    function! g:sunset_callback()
-        if g:sunset_last_background != &bg &&
-                    \ exists(':PowerlineReloadColorscheme')
-            let g:sunset_last_background = &bg
-            let g:Powerline_colorscheme =
-                \ &background == 'light' ? 'solarizedLight' : 'solarizedDark'
+    let g:loaded_sunset = 1
+<
+
+'g:sunset_daytime_callback()' &                *'sunset_daytime_callback()'*
+'g:sunset_nighttime_callback()'              *'sunset_nighttime_callback()'*
+
+These two callbacks can be used to override Sunset's behaviour by adding your
+own. If you define either of these callbacks, Sunset's default behaviour of
+setting 'background' will be ignored, and your function will be called
+instead.
+
+For example, perhaps you want to use one |colorscheme| during the day, and
+another at night:
+>
+    function! g:sunset_daytime_callback()
+        colorscheme 'Hemisu'
+    endfunction
+
+    function! g:sunset_nighttime_callback()
+        colorscheme 'Solarized'
+    endfunction
+<
+
+You could change the theme used by Powerline*:
+>
+    function! g:sunset_daytime_callback()
+        if exists(':PowerlineReloadColorscheme')
+            let g:Powerline_colorscheme = 'solarizedLight'
             PowerlineReloadColorscheme
         endif
     endfunction
-<
+
+    function! g:sunset_nighttime_callback()
+        if exists(':PowerlineReloadColorscheme')
+            let g:Powerline_colorscheme = 'solarizedDark'
+            PowerlineReloadColorscheme
+        endif
+    endfunction
+>
 
 * Powerline is 'the ultimate vim statusline utility'. It's very cool; you
   should check it out: https://github.com/Lokaltog/vim-powerline
@@ -191,6 +222,14 @@ whereabouts to the greater public. If this concerns you, using the location of
 your nearest large city might suffice; Sunset will be plenty accurate enough.
 
 VERSION HISTORY                                     *sunset-version-history*
+
+1.2.0 (Mon Nov 5, 2012) ~
+
+    - |GetLatestVimScripts|-compatible.
+    - New behaviour with |'sunset_daytime_callback()'|
+      and |'sunset_nighttime_callback()'|.
+    - sunset_callback() has been deprecated and will be removed in the next
+      release.
 
 1.1.0 (Sun Oct 28, 2012) ~
 
