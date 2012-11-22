@@ -4,8 +4,8 @@ FRONT MATTER                                           *sunset-front-matter*
 
      Maintainer: Alastair Touw <alastair@touw.me.uk>
         License: Distributed under the same terms as Vim. See |license|.
-        Version: 1.2.0
-    Last Change: 2012 Nov 5
+        Version: 1.2.1
+    Last Change: 2012 Nov 22
 
 INTRODUCTION AND USAGE                    *sunset* *sunset-introduction-usage*
 
@@ -50,11 +50,11 @@ CONTENTS                                                   *sunset-contents*
           a) 'g:loaded_sunset'  . . . . . . . . . . . . .  |'loaded_sunset'|
           b) 'g:sunset_daytime_callback()' &   |'sunset_daytime_callback()'|
              'g:sunset_nighttime_callback()' |'sunset_nighttime_callback()'|
-      4. A Reminder on Privacy  . . . . . . . . . . . . . . |sunset-privacy|
-      5. Version History  . . . . . . . . . . . . . |sunset-version-history|
-      6. Known Issues . . . . . . . . . . . . . . . .  |sunset-known-issues|
-      7. License  . . . . . . . . . . . . . . . . . . . . . |sunset-license|
-      8. Credits  . . . . . . . . . . . . . . . . . . . . . |sunset-credits|
+      5. A Reminder on Privacy  . . . . . . . . . . . . . . |sunset-privacy|
+      6. Version History  . . . . . . . . . . . . . |sunset-version-history|
+      7. Known Issues . . . . . . . . . . . . . . . .  |sunset-known-issues|
+      8. License  . . . . . . . . . . . . . . . . . . . . . |sunset-license|
+      9. Credits  . . . . . . . . . . . . . . . . . . . . . |sunset-credits|
 
 INSTALLATION                                           *sunset-installation*
 
@@ -222,6 +222,10 @@ whereabouts to the greater public. If this concerns you, using the location of
 your nearest large city might suffice; Sunset will be plenty accurate enough.
 
 VERSION HISTORY                                     *sunset-version-history*
+
+1.2.1 (Thu Nov 22, 2012) ~
+
+    - Fix table of contents numbering in documentation.
 
 1.2.0 (Mon Nov 5, 2012) ~
 

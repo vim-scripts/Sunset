@@ -4,11 +4,11 @@
 "  Maintainer: Alastair Touw <alastair@touw.me.uk>
 "     Website: http://github.com/amdt/sunset
 "     License: Distributed under the same terms as Vim. See ':help license'.
-"     Version: 1.2.0
-" Last Change: 2012 Nov 5
+"     Version: 1.2.1
+" Last Change: 2012 Nov 22
 "       Usage: See 'doc/sunset.txt' or ':help sunset' if installed.
 "
-" GetLatestVimScripts: 4277 18920 :AutoInstall: Sunset
+" GetLatestVimScripts: 4277 18950 :AutoInstall: Sunset
 
 if exists("g:loaded_sunset")
 	finish
