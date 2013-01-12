@@ -4,8 +4,8 @@ FRONT MATTER                                           *sunset-front-matter*
 
      Maintainer: Alastair Touw <alastair@touw.me.uk>
         License: Distributed under the same terms as Vim. See |license|.
-        Version: 1.2.1
-    Last Change: 2012 Nov 22
+        Version: 2.0.0
+    Last Change: 2013 Jan 12
 
 INTRODUCTION AND USAGE                    *sunset* *sunset-introduction-usage*
 
@@ -100,6 +100,7 @@ directory tree for Sunset is as follows:
         sunset.txt
     /plugin
         sunset.vim
+	CONTRIBUTING.markdown
     README.markdown
 
 Place `sunset.txt` under `$HOME/.vim/doc` and `sunset.vim` under
@@ -107,7 +108,7 @@ Place `sunset.txt` under `$HOME/.vim/doc` and `sunset.vim` under
 
 You can find this by typing '|:echo| |$HOME|'.
 
-You can safely discard of `README.markdown`.
+You can safely discard of `README.markdown` and `CONTRIBUTING.markdown`.
 
 REQUIREMENTS                                           *sunset-requirements*
 
@@ -118,6 +119,9 @@ REQUIREMENTS                                           *sunset-requirements*
         - %j returns the current day of the year.
         - %H returns the current hour of the day in 24-hour time.
         - %M returns the current minute of the hour.
+
+Note: If your system's |strftime()| differs, please open an issue on the
+Github page at: http://github.com/amdt/sunset/issues with details.
 
 Recommended: ~
 
@@ -130,7 +134,8 @@ CONFIGURATION (REQUIRED)                     *sunset-configuration-required*
 'g:sunset_latitude' & 'g:sunset_longitude'               *'sunset_latitude'*
                                                         *'sunset_longitude'*
 
-Note: If you push your dotfiles to Github, please see |sunset-privacy|.
+Note: If you push your dotfiles to (for example) Github, please
+see |sunset-privacy|.
 
 The latitude and longitude of your location in decimal. Values North and East
 must be positive values, those South and West must be negative.
@@ -216,12 +221,21 @@ You could change the theme used by Powerline*:
 
 A REMINDER ON PRIVACY                                       *sunset-privacy*
 
-For those of us who publish our dotfiles on Github etc., please take this
-as a gentle reminder that out of habit you might be about to publish your
+For those of us who publish our dotfiles on (for example) Github, please take
+this as a gentle reminder that out of habit you might be about to publish your
 whereabouts to the greater public. If this concerns you, using the location of
 your nearest large city might suffice; Sunset will be plenty accurate enough.
 
 VERSION HISTORY                                     *sunset-version-history*
+
+2.0.0 (Sat Jan 12, 2013) ~
+
+    - Sunset now switches your background (or calls your callbacks) mid-way
+      through Civil Twilight time.
+    - *Note:* Sunset 2.0.0 breaks compatibility with previous versions of
+      Sunset for users of the `sunset_callback()` callback.
+      |'sunset_daytime_callback()'| and |'sunset_nighttime_callback()'| are
+      unaffected.
 
 1.2.1 (Thu Nov 22, 2012) ~
 
@@ -232,12 +246,12 @@ VERSION HISTORY                                     *sunset-version-history*
     - |GetLatestVimScripts|-compatible.
     - New behaviour with |'sunset_daytime_callback()'|
       and |'sunset_nighttime_callback()'|.
-    - sunset_callback() has been deprecated and will be removed in the next
+    - `sunset_callback()` has been deprecated and will be removed in the next
       release.
 
 1.1.0 (Sun Oct 28, 2012) ~
 
-    - Added |'sunset_callback()'|.
+    - Added `sunset_callback()`.
         Courtesy of Github user 'delphinus35'
         (http://github.com/amdt/sunset/pull/1)
 

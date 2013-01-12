@@ -4,11 +4,11 @@
 "  Maintainer: Alastair Touw <alastair@touw.me.uk>
 "     Website: http://github.com/amdt/sunset
 "     License: Distributed under the same terms as Vim. See ':help license'.
-"     Version: 1.2.1
-" Last Change: 2012 Nov 22
+"     Version: 2.0.0
+" Last Change: 2013 Jan 12
 "       Usage: See 'doc/sunset.txt' or ':help sunset' if installed.
 "
-" GetLatestVimScripts: 4277 18950 :AutoInstall: Sunset
+" GetLatestVimScripts: 4277 19013 :AutoInstall: Sunset
 
 if exists("g:loaded_sunset")
 	finish
@@ -16,7 +16,6 @@ endif
 let g:loaded_sunset = 1
 
 let s:errors = []
-let s:warnings = []
 
 if v:version < 703
 	call add(s:errors, "Requires Vim 7.3")
@@ -28,10 +27,6 @@ endif
 
 if !exists("*strftime")
 	call add(s:errors, "Requires a system with strftime()")
-endif
-
-if exists('*g:sunset_callback')
-	call add(s:warnings, "sunset_callback() has been deprecated and will be removed in the next release. Please see `:h 'sunset_daytime_callback()'` & `:h 'sunset_nighttime_callback()'`")
 endif
 
 let s:required_options =
@@ -56,12 +51,6 @@ if !empty(s:errors)
 	finish
 endif
 
-if !empty(s:warnings)
-	for warning in s:warnings
-		echoerr warning
-	endfor
-endif
-
 let s:save_cpo = &cpo
 set cpo&vim
 
@@ -79,7 +68,7 @@ function s:hours_and_minutes_to_minutes(hours, minutes)
 endfunction
 
 function s:daytimep(current_time)
-	if a:current_time <= s:SUNRISE_TIME || a:current_time >= s:SUNSET_TIME
+	if a:current_time <= (s:SUNRISE_TIME - 15) || a:current_time >= (s:SUNSET_TIME + 15)
 		return 0
 	else
 		return 1
@@ -220,9 +209,6 @@ function s:sunset()
 			let s:NIGHTTIME_CHECKED = 1
 			let s:DAYTIME_CHECKED = 0
 		endif
-	endif
-	if exists('*g:sunset_callback')
-		call g:sunset_callback()
 	endif
 endfunction
 
