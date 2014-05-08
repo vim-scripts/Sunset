@@ -4,8 +4,8 @@
 "  Maintainer: Alastair Touw <alastair@touw.me.uk>
 "     Website: http://github.com/amdt/sunset
 "     License: Distributed under the same terms as Vim. See ':help license'.
-"     Version: 2.0.0
-" Last Change: 2013 Jan 12
+"     Version: 2.0.1
+" Last Change: 2014 May 08
 "       Usage: See 'doc/sunset.txt' or ':help sunset' if installed.
 "
 " GetLatestVimScripts: 4277 19013 :AutoInstall: Sunset
@@ -80,11 +80,11 @@ function s:calculate(sunrisep)
     " in the Almanac for Computers, 1990, by the Nautical Almanac Office of the
     " United States Naval Observatory, as detailed
     " here: http://williams.best.vwh.net/sunrise_sunset_algorithm.htm
-	function! l:degrees_to_radians(degrees)
+	function! s:degrees_to_radians(degrees)
 		return (s:PI / 180) * a:degrees
 	endfunction
 
-	function! l:radians_to_degrees(radians)
+	function! s:radians_to_degrees(radians)
 		return (180 / s:PI) * a:radians
 	endfunction
 
@@ -107,8 +107,8 @@ function s:calculate(sunrisep)
 	" 4. Calculate the Sun's true longitude
 	let l:true_longitude =
 				\ l:mean_anomaly +
-				\ (1.916 * sin(l:degrees_to_radians(l:mean_anomaly))) +
-				\ (0.020 * sin(l:degrees_to_radians(2) * l:degrees_to_radians(l:mean_anomaly))) +
+				\ (1.916 * sin(s:degrees_to_radians(l:mean_anomaly))) +
+				\ (0.020 * sin(s:degrees_to_radians(2) * s:degrees_to_radians(l:mean_anomaly))) +
 				\ 282.634
 	
 	if l:true_longitude < 0
@@ -119,7 +119,7 @@ function s:calculate(sunrisep)
 	
 	" 5a. Calculate the Sun's right ascension
 	let l:right_ascension =
-				\ l:radians_to_degrees(atan(0.91764 * tan(l:degrees_to_radians(l:true_longitude))))
+				\ s:radians_to_degrees(atan(0.91764 * tan(s:degrees_to_radians(l:true_longitude))))
 
 	if l:right_ascension < 0
 		let l:right_ascension = l:right_ascension + 360
@@ -140,14 +140,14 @@ function s:calculate(sunrisep)
 	" 6. Calculate the Sun's declination
 	let l:sin_declination =
 				\ 0.39782 *
-				\ sin(l:degrees_to_radians(l:true_longitude))
+				\ sin(s:degrees_to_radians(l:true_longitude))
 	let l:cos_declination =
-				\ cos(asin(l:degrees_to_radians(l:sin_declination)))
+				\ cos(asin(s:degrees_to_radians(l:sin_declination)))
 
 	" 7a. Calculate the Sun's local hour angle
 	let l:cos_hour_angle =
-				\ (cos(l:degrees_to_radians(s:ZENITH)) - (l:sin_declination * sin(l:degrees_to_radians(g:sunset_latitude)))) /
-				\ (l:cos_declination * cos(l:degrees_to_radians(g:sunset_latitude)))
+				\ (cos(s:degrees_to_radians(s:ZENITH)) - (l:sin_declination * sin(s:degrees_to_radians(g:sunset_latitude)))) /
+				\ (l:cos_declination * cos(s:degrees_to_radians(g:sunset_latitude)))
 
 	if l:cos_hour_angle > 1
 		" the sun never rises on this location (on the specified date)
@@ -157,9 +157,9 @@ function s:calculate(sunrisep)
 
 	" 7b. Finish calculating H and convert into hours
 	if a:sunrisep
-		let l:hour = 360 - l:radians_to_degrees(acos(l:cos_hour_angle))
+		let l:hour = 360 - s:radians_to_degrees(acos(l:cos_hour_angle))
 	else
-		let l:hour = l:radians_to_degrees(acos(l:cos_hour_angle))
+		let l:hour = s:radians_to_degrees(acos(l:cos_hour_angle))
 	endif
 
 	let l:hour = l:hour / 15

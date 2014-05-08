@@ -4,8 +4,8 @@ FRONT MATTER                                           *sunset-front-matter*
 
      Maintainer: Alastair Touw <alastair@touw.me.uk>
         License: Distributed under the same terms as Vim. See |license|.
-        Version: 2.0.0
-    Last Change: 2013 Jan 12
+        Version: 2.0.1
+    Last Change: 2014 May 08
 
 INTRODUCTION AND USAGE                    *sunset* *sunset-introduction-usage*
 
@@ -227,6 +227,11 @@ whereabouts to the greater public. If this concerns you, using the location of
 your nearest large city might suffice; Sunset will be plenty accurate enough.
 
 VERSION HISTORY                                     *sunset-version-history*
+
+2.0.1 (Thu May 8, 2014) ~
+
+    - Fixed an issue where versions of Vim greater than 7.4.260 would not
+      allow this script to run. (https://github.com/amdt/sunset/issues/8)
 
 2.0.0 (Sat Jan 12, 2013) ~
 
