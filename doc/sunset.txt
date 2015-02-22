@@ -4,24 +4,24 @@ FRONT MATTER                                           *sunset-front-matter*
 
      Maintainer: Alastair Touw <alastair@touw.me.uk>
         License: Distributed under the same terms as Vim. See |license|.
-        Version: 2.0.1
-    Last Change: 2014 May 08
+        Version: 3.0.0
+    Last Change: 2015-02-22
 
 INTRODUCTION AND USAGE                    *sunset* *sunset-introduction-usage*
 
 Sunset automatically sets 'background' when the sun rises and sets, and also
-when you start Vim. When the sun is up, or rises, it'll
-'set background=light'. When the sun is down, or sets,
-it'll 'set background=dark'.
+when you start Vim. When the sun is up, or rises, it’ll
+‘set background=light’. When the sun is down, or sets,
+it’ll ‘set background=dark’.
 
-Sunset can also change your |colorscheme|, your Powerline theme, or anything
-else you can think of. See |'sunset_daytime_callback()'| and
-|'sunset_nighttime_callback()'| for details.
+Sunset can also change your |colorscheme|, your Powerline theme, or do
+anything else you can think of. See |'Sunset_daytime_callback()'| and
+|'Sunset_nighttime_callback()'| for details.
 
-So as not to interrupt you, Sunset waits for four seconds (on the
-|CursorHold| event) after you've pressed a key or left insert mode before
-changing the background. If you change your background during the day or
-night, it'll respect that.
+So as not to interrupt you, Sunset waits for four seconds after you’ve pressed
+a key or left insert mode (ie. on the |CursorHold| event) before changing the
+background. If you change your background during the day or night, it’ll
+respect that.
 
 You must set some options in your `.vimrc` for Sunset to work, so
 please read on to |sunset-configuration| for details.
@@ -29,7 +29,7 @@ please read on to |sunset-configuration| for details.
 CONTRIBUTIONS                                         *sunset-contributions*
 
 If you feel that Sunset can be improved, pull requests and issues are
-appreciated and humbly requested, on Github at: http://github.com/amdt/sunset
+appreciated and humbly requested, on GitHub at: https://github.com/amdt/sunset
 
 CONTENTS                                                   *sunset-contents*
 
@@ -43,13 +43,13 @@ CONTENTS                                                   *sunset-contents*
           c) Manually . . . . . . . . . . . . . |sunset-installation-manual|
       2. Requirements . . . . . . . . . . . . . . . .  |sunset-requirements|
       3. Configuration (required) . . . . .  |sunset-configuration-required|
-          a) 'g:sunset_latitude' &  . . . . . . . . . .  |'sunset_latitude'|
-             'g:sunset_longitude' . . . . . . . . . . . |'sunset_longitude'|
-          b) 'g:sunset_utc_offset'  . . . . . . . . .  |'sunset_utc_offset'|
+          a) ‘g:sunset_latitude’ &  . . . . . . . . . .  |'sunset_latitude'|
+             ‘g:sunset_longitude’ . . . . . . . . . . . |'sunset_longitude'|
+          b) ‘g:sunset_utc_offset’  . . . . . . . . .  |'sunset_utc_offset'|
       4. Configuration (optional) . . . . .  |sunset-configuration-optional|
-          a) 'g:loaded_sunset'  . . . . . . . . . . . . .  |'loaded_sunset'|
-          b) 'g:sunset_daytime_callback()' &   |'sunset_daytime_callback()'|
-             'g:sunset_nighttime_callback()' |'sunset_nighttime_callback()'|
+          a) ‘g:loaded_sunset’  . . . . . . . . . . . . .  |'loaded_sunset'|
+          b) ‘Sunset_daytime_callback()’ &     |'Sunset_daytime_callback()'|
+             ‘Sunset_nighttime_callback()’   |'Sunset_nighttime_callback()'|
       5. A Reminder on Privacy  . . . . . . . . . . . . . . |sunset-privacy|
       6. Version History  . . . . . . . . . . . . . |sunset-version-history|
       7. Known Issues . . . . . . . . . . . . . . . .  |sunset-known-issues|
@@ -62,8 +62,8 @@ With a Plugin Manager:                  *sunset-installation-plugin-manager*
 
 Vundle: ~
 
-If you don't already have a preferred manager, I recommend installing Vundle
-(http://github.com/gmarik/vundle). Once done, add the declaration for Sunset
+If you don’t already have a preferred manager, I recommend installing Vundle
+(https://github.com/gmarik/vundle). Once done, add the declaration for Sunset
 to your `.vimrc`:
 >
     Bundle 'amdt/sunset'
@@ -74,7 +74,7 @@ And install:
 <
 Pathogen: ~
 
-If you're using Pathogen, simply extract the archive to `$HOME/.vim/bundle` or
+If you’re using Pathogen, simply extract the archive to `$HOME/.vim/bundle` or
 better yet, clone the Git repository. In a UNIX shell, for example:
 >
     cd ~/.vim/bundle
@@ -93,22 +93,21 @@ Once loaded in Vim, run the following two commands:
 <
 Manually:                                       *sunset-installation-manual*
 
-Copy the files in the included zip archive into your 'runtimepath'. The
-directory tree for Sunset is as follows:
+Copy the files in the included zip archive into your 'runtimepath' as per the
+following figure. The directory tree for Sunset is on the left, and the
+resulting tree in your own home directory on the right:
 
-    /doc
-        sunset.txt
-    /plugin
-        sunset.vim
-	CONTRIBUTING.markdown
-    README.markdown
+    /doc                         :    `$HOME/.vim/doc`
+        sunset.txt               :        sunset.txt
+    /plugin                      :    `$HOME/.vim/plugin`
+        sunset.vim               :        sunset.vim
+    CONTRIBUTING.markdown        :
+    README.markdown              :
 
 Place `sunset.txt` under `$HOME/.vim/doc` and `sunset.vim` under
 `$HOME/.vim/plugin` where `$HOME` is the location of your `.vim` directory.
-
-You can find this by typing '|:echo| |$HOME|'.
-
-You can safely discard of `README.markdown` and `CONTRIBUTING.markdown`.
+You can find this by typing ‘|:echo| |$HOME|’. You can safely discard of
+`README.markdown` and `CONTRIBUTING.markdown`.
 
 REQUIREMENTS                                           *sunset-requirements*
 
@@ -120,21 +119,22 @@ REQUIREMENTS                                           *sunset-requirements*
         - %H returns the current hour of the day in 24-hour time.
         - %M returns the current minute of the hour.
 
-Note: If your system's |strftime()| differs, please open an issue on the
-Github page at: http://github.com/amdt/sunset/issues with details.
+Note: If your system’s |strftime()| differs, please open an issue on the
+GitHub page at https://github.com/amdt/sunset/issues with details.
 
 Recommended: ~
 
     * A |colorscheme| with both light and dark variants, such as Solarized
-      (http://github.com/altercation/vim-colors-solarized) or Hemisu
-      (http://github.com/noahfrederick/Hemisu).
+      (https://github.com/altercation/vim-colors-solarized) or Hemisu
+      (https://github.com/noahfrederick/Hemisu).
 
 CONFIGURATION (REQUIRED)                     *sunset-configuration-required*
+                                                      *sunset_configuration*
 
 'g:sunset_latitude' & 'g:sunset_longitude'               *'sunset_latitude'*
                                                         *'sunset_longitude'*
 
-Note: If you push your dotfiles to (for example) Github, please
+Note: If you push your dotfiles to (for example) GitHub, please
 see |sunset-privacy|.
 
 The latitude and longitude of your location in decimal. Values North and East
@@ -156,7 +156,7 @@ as follows:
     let g:sunset_latitude = 35.67
     let g:sunset_longitude = 139.8
 <
-Note: Don't forget, negative values South and West.
+Note: Don’t forget, negative values South and West.
 
 'g:sunset_utc_offset'                                  *'sunset_utc_offset'*
 
@@ -179,36 +179,36 @@ Set to a non-0 value to disable Sunset, for example:
     let g:loaded_sunset = 1
 <
 
-'g:sunset_daytime_callback()' &                *'sunset_daytime_callback()'*
-'g:sunset_nighttime_callback()'              *'sunset_nighttime_callback()'*
+'Sunset_daytime_callback()' &                  *'Sunset_daytime_callback()'*
+'Sunset_nighttime_callback()'                *'Sunset_nighttime_callback()'*
 
-These two callbacks can be used to override Sunset's behaviour by adding your
-own. If you define either of these callbacks, Sunset's default behaviour of
+These two callbacks can be used to override Sunset’s behaviour by adding your
+own. If you define either of these callbacks, Sunset’s default behaviour of
 setting 'background' will be ignored, and your function will be called
 instead.
 
 For example, perhaps you want to use one |colorscheme| during the day, and
 another at night:
 >
-    function! g:sunset_daytime_callback()
-        colorscheme 'Hemisu'
+    function! Sunset_daytime_callback()
+        colorscheme Hemisu
     endfunction
 
-    function! g:sunset_nighttime_callback()
-        colorscheme 'Solarized'
+    function! Sunset_nighttime_callback()
+        colorscheme Solarized
     endfunction
 <
 
 You could change the theme used by Powerline*:
 >
-    function! g:sunset_daytime_callback()
+    function! Sunset_daytime_callback()
         if exists(':PowerlineReloadColorscheme')
             let g:Powerline_colorscheme = 'solarizedLight'
             PowerlineReloadColorscheme
         endif
     endfunction
 
-    function! g:sunset_nighttime_callback()
+    function! Sunset_nighttime_callback()
         if exists(':PowerlineReloadColorscheme')
             let g:Powerline_colorscheme = 'solarizedDark'
             PowerlineReloadColorscheme
@@ -216,17 +216,27 @@ You could change the theme used by Powerline*:
     endfunction
 >
 
-* Powerline is 'the ultimate vim statusline utility'. It's very cool; you
+* Powerline is ‘the ultimate vim statusline utility’. It’s very cool; you
   should check it out: https://github.com/Lokaltog/vim-powerline
 
 A REMINDER ON PRIVACY                                       *sunset-privacy*
 
-For those of us who publish our dotfiles on (for example) Github, please take
+For those of us who publish our dotfiles on (for example) GitHub, please take
 this as a gentle reminder that out of habit you might be about to publish your
 whereabouts to the greater public. If this concerns you, using the location of
 your nearest large city might suffice; Sunset will be plenty accurate enough.
 
 VERSION HISTORY                                     *sunset-version-history*
+
+Sunset follows the Semantic Versioning specification (http://semver.org).
+
+3.0.0 (Sun Feb 22, 2015) ~
+
+    - Fixed an issue where |cpoptions| may not be restored when the script
+      finishes early
+    - Updated the function names for the |'Sunset_daytime_callback()'| and
+      |'Sunset_nighttime_callback()'| callbacks to match changes to the VimL
+      interpreter (https://github.com/amdt/sunset/issues/9)
 
 2.0.1 (Thu May 8, 2014) ~
 
@@ -237,7 +247,7 @@ VERSION HISTORY                                     *sunset-version-history*
 
     - Sunset now switches your background (or calls your callbacks) mid-way
       through Civil Twilight time.
-    - *Note:* Sunset 2.0.0 breaks compatibility with previous versions of
+    - Note: Sunset 2.0.0 breaks compatibility with previous versions of
       Sunset for users of the `sunset_callback()` callback.
       |'sunset_daytime_callback()'| and |'sunset_nighttime_callback()'| are
       unaffected.
@@ -257,8 +267,8 @@ VERSION HISTORY                                     *sunset-version-history*
 1.1.0 (Sun Oct 28, 2012) ~
 
     - Added `sunset_callback()`.
-        Courtesy of Github user 'delphinus35'
-        (http://github.com/amdt/sunset/pull/1)
+        Courtesy of GitHub user ‘delphinus35’
+        (https://github.com/amdt/sunset/pull/1)
 
 1.0.3 (Sat Oct 20, 2012) ~
 
@@ -276,7 +286,7 @@ VERSION HISTORY                                     *sunset-version-history*
 KNOWN ISSUES                                           *sunset-known-issues*
 
 For known issues (and to report your own), please see the issue tracker on
-Github: http://github.com/amdt/sunset/issues
+GitHub: https://github.com/amdt/sunset/issues
 
 LICENSE                                                     *sunset-license*
 
@@ -295,7 +305,7 @@ Special thanks: ~
     * Gueorgui Tcherednitchenko --- Whose tweet
       (http://twitter.com/gueorgui/statuses/250765514975113216)
       inspired the development of this plugin.
-    * Nick Rogers --- Whose testing helped define Sunset's requirements.
+    * Nick Rogers --- Whose testing helped define Sunset’s requirements.
 
                                     * * *
 
