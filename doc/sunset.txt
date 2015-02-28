@@ -4,8 +4,8 @@ FRONT MATTER                                           *sunset-front-matter*
 
      Maintainer: Alastair Touw <alastair@touw.me.uk>
         License: Distributed under the same terms as Vim. See |license|.
-        Version: 3.0.0
-    Last Change: 2015-02-22
+        Version: 3.1.0
+    Last Change: 2015-02-28
 
 INTRODUCTION AND USAGE                    *sunset* *sunset-introduction-usage*
 
@@ -158,9 +158,13 @@ as follows:
 <
 Note: Don’t forget, negative values South and West.
 
+CONFIGURATION (OPTIONAL)                     *sunset-configuration-optional*
+
 'g:sunset_utc_offset'                                  *'sunset_utc_offset'*
 
-The difference in hours between your timezone and Coordinated Universal Time.
+Sunset gets the local timezone from your system.  You can override this by
+setting the difference in hours between your timezone and Coordinated
+Universal Time (UTC).
 
 For example:
 >
@@ -169,8 +173,6 @@ For example:
     let g:sunset_utc_offset = 9 " Tokyo
 <
 Note: Sunset does not handle any daylight savings civil times.
-
-CONFIGURATION (OPTIONAL)                     *sunset-configuration-optional*
 
 'g:loaded_sunset'                                          *'loaded_sunset'*
 
@@ -229,6 +231,13 @@ your nearest large city might suffice; Sunset will be plenty accurate enough.
 VERSION HISTORY                                     *sunset-version-history*
 
 Sunset follows the Semantic Versioning specification (http://semver.org).
+
+3.1.0 (Sun Feb 27, 2015) ~
+
+    - Made 'g:sunset_utc_offset' optional
+      (thanks to 'andreax79': https://github.com/amdt/sunset/pull/11)
+    - Fixed an issue that caused a 'E122' error with the 'restore_cpoptions'
+      function
 
 3.0.0 (Sun Feb 22, 2015) ~
 
